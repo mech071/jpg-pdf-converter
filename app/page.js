@@ -55,15 +55,18 @@ export default function FileDrop() {
 
     const url = URL.createObjectURL(blob);
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${baseName}.pdf`;
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      window.open(url, "_blank");
+    } else {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${baseName}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
 
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   return (
